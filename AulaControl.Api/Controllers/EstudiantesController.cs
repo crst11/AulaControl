@@ -31,7 +31,9 @@ public class EstudiantesController : ControllerBase
         var estudiante = await _context.Estudiantes.FindAsync(id);
 
         if (estudiante == null)
+        {
             return NotFound("Estudiante no encontrado.");
+        }
 
         return estudiante;
     }
@@ -43,7 +45,9 @@ public class EstudiantesController : ControllerBase
             .AnyAsync(e => e.CodigoEstudiante == dto.CodigoEstudiante);
 
         if (existeCodigo)
+        {
             return BadRequest("Ya existe un estudiante con ese código.");
+        }
 
         var estudiante = new Estudiante
         {
@@ -67,7 +71,17 @@ public class EstudiantesController : ControllerBase
         var estudiante = await _context.Estudiantes.FindAsync(id);
 
         if (estudiante == null)
+        {
             return NotFound("Estudiante no encontrado.");
+        }
+
+        var existeCodigo = await _context.Estudiantes
+            .AnyAsync(e => e.CodigoEstudiante == dto.CodigoEstudiante && e.Id != id);
+
+        if (existeCodigo)
+        {
+            return BadRequest("Ya existe otro estudiante con ese código.");
+        }
 
         estudiante.Nombre = dto.Nombre;
         estudiante.CodigoEstudiante = dto.CodigoEstudiante;
@@ -86,7 +100,17 @@ public class EstudiantesController : ControllerBase
         var estudiante = await _context.Estudiantes.FindAsync(id);
 
         if (estudiante == null)
+        {
             return NotFound("Estudiante no encontrado.");
+        }
+
+        var tienePrestamoActivo = await _context.Prestamos
+            .AnyAsync(p => p.EstudianteId == id && p.EstadoPrestamo == "Activo");
+
+        if (tienePrestamoActivo)
+        {
+            return BadRequest("No se puede eliminar este estudiante porque tiene un préstamo activo. Primero debe devolver o saldar el préstamo.");
+        }
 
         _context.Estudiantes.Remove(estudiante);
         await _context.SaveChangesAsync();

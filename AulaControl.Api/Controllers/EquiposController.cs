@@ -40,7 +40,9 @@ public class EquiposController : ControllerBase
         var equipo = await _context.Equipos.FindAsync(id);
 
         if (equipo == null)
+        {
             return NotFound("Equipo no encontrado.");
+        }
 
         return equipo;
     }
@@ -52,7 +54,9 @@ public class EquiposController : ControllerBase
             .AnyAsync(e => e.CodigoInventario == dto.CodigoInventario);
 
         if (existeCodigo)
+        {
             return BadRequest("Ya existe un equipo con ese código de inventario.");
+        }
 
         var equipo = new Equipo
         {
@@ -76,7 +80,17 @@ public class EquiposController : ControllerBase
         var equipo = await _context.Equipos.FindAsync(id);
 
         if (equipo == null)
+        {
             return NotFound("Equipo no encontrado.");
+        }
+
+        var existeCodigo = await _context.Equipos
+            .AnyAsync(e => e.CodigoInventario == dto.CodigoInventario && e.Id != id);
+
+        if (existeCodigo)
+        {
+            return BadRequest("Ya existe otro equipo con ese código de inventario.");
+        }
 
         equipo.Nombre = dto.Nombre;
         equipo.CodigoInventario = dto.CodigoInventario;
@@ -94,7 +108,9 @@ public class EquiposController : ControllerBase
         var equipo = await _context.Equipos.FindAsync(id);
 
         if (equipo == null)
+        {
             return NotFound("Equipo no encontrado.");
+        }
 
         equipo.Estado = estado;
         await _context.SaveChangesAsync();
@@ -108,7 +124,17 @@ public class EquiposController : ControllerBase
         var equipo = await _context.Equipos.FindAsync(id);
 
         if (equipo == null)
+        {
             return NotFound("Equipo no encontrado.");
+        }
+
+        var tienePrestamoActivo = await _context.Prestamos
+            .AnyAsync(p => p.EquipoId == id && p.EstadoPrestamo == "Activo");
+
+        if (tienePrestamoActivo)
+        {
+            return BadRequest("No se puede eliminar este equipo porque tiene un préstamo activo. Primero debe devolverse o saldarse el préstamo.");
+        }
 
         _context.Equipos.Remove(equipo);
         await _context.SaveChangesAsync();
