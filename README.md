@@ -57,8 +57,14 @@ Las funciones principales son:
 10. Consultar el resumen general del sistema.
 
 ---
+## Funcionamiento general del sistema
 
-## Estructura del proyecto
+El sistema está dividido en tres partes principales:
+
+```text
+Frontend Angular  →  Backend .NET API  →  Base de datos MySQL
+
+Estructura del proyecto
 
 AulaControl/
 ├── AulaControl.Api/
@@ -88,10 +94,3 @@ AulaControl/
 ├── docker-compose.yml
 └── README.md
 
----
-## Funcionamiento general del sistema
-
-El sistema está dividido en tres partes principales:
-
-```text
-Frontend Angular  →  Backend .NET API  →  Base de datos MySQL
