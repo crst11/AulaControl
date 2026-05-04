@@ -1,0 +1,47 @@
+    1  cd "C:/Users/Cristian/Documents/4 Semestre/Estructura y Informacion/AulaControl/AulaControl"
+    2  docker compose up -d mysql
+    3  docker ps
+    4  cd "C:/Users/Cristian/Documents/4 Semestre/Estructura y Informacion/AulaControl/AulaControl"
+    5  docker compose down -v
+    6  docker compose up -d mysql
+    7  cd AulaControl.Api
+    8  dotnet ef database update
+    9  dotnet run
+   10  cd "C:/Users/Cristian/Documents/4 Semestre/Estructura y Informacion/AulaControl/AulaControl"
+   11  docker compose down -v
+   12  docker compose up -d mysql
+   13  cd AulaControl.Api
+   14  dotnet ef database update
+   15  dotnet run
+   16  cd "C:/Users/Cristian/Documents/4 Semestre/Estructura y Informacion/AulaControl/AulaControl"
+   17  docker compose down -v
+   18  docker compose up -d mysql
+   19  cd AulaControl.Api
+   20  dotnet ef database update
+   21  cd "C:/Users/Cristian/Documents/4 Semestre/Estructura y Informacion/AulaControl/AulaControl/AulaControl.Api"
+   22  dotnet build
+   23  taskkill //F //IM AulaControl.Api.exe
+   24  taskkill //F //IM dotnet.exe
+   25  cd "C:/Users/Cristian/Documents/4 Semestre/Estructura y Informacion/AulaControl/AulaControl/AulaControl.Api"
+   26  dotnet clean
+   27  dotnet build
+   28  dotnet ef database update
+   29  dotnet run
+   30  git commit --no-edit
+   31  git status
+   32  git merge feature/dockerizacion
+   33  cd ..
+   34  git status
+   35  git push -u origin develop
+   36  git checkout main
+   37  git merge develop
+   38  git push origin main
+   39  git status
+   40  git log --oneline --graph --all --decorate -10
+   41  history
+   42  history | grep "git" > historial_git.txt
+   43  history | grep "docker" > historial_docker.txt
+   44  history | grep "dotnet" > historial_dotnet.txt
+   45  history | grep -E "npm|ng" > historial_frontend.txt
+   46  code historial_comandos_aulacontrol.txt
+   47  history > historial_comandos.txt
