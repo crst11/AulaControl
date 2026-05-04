@@ -10,6 +10,38 @@ services:
       - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p123456"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./AulaControl.Api
+      dockerfile: Dockerfile
+    container_name: aulacontrol_backend
+    restart: always
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__MySqlConnection: server=mysql;port=3306;database=aulacontroldb;user=root;password=123456
+    ports:
+      - "5212:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./aula-control-front
+      dockerfile: Dockerfile
+    container_name: aulacontrol_frontend
+    restart: always
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
 
 volumes:
   mysql_data:
