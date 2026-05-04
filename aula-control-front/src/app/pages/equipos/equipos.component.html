@@ -1,0 +1,139 @@
+<section class="hero">
+  <h1>Equipos</h1>
+  <p>Registra, edita y elimina equipos universitarios.</p>
+</section>
+
+<div
+  class="mensaje"
+  *ngIf="mensaje"
+  [class.success]="tipoMensaje === 'success'"
+  [class.error]="tipoMensaje === 'error'"
+  [class.info]="tipoMensaje === 'info'"
+>
+  {{ mensaje }}
+</div>
+
+<section class="panel">
+  <div class="panel-header">
+    <div>
+      <h2>{{ modoEdicion ? 'Editar equipo' : 'Registrar equipo' }}</h2>
+      <p>Completa la información del equipo.</p>
+    </div>
+
+    <button
+      *ngIf="modoEdicion"
+      type="button"
+      class="secondary"
+      (click)="limpiarFormulario()"
+    >
+      Cancelar edición
+    </button>
+  </div>
+
+  <form class="form-grid" (ngSubmit)="guardarEquipo()">
+    <input
+      type="text"
+      placeholder="Nombre del equipo"
+      [(ngModel)]="equipoForm.nombre"
+      name="nombreEquipo"
+      required
+    >
+
+    <input
+      type="text"
+      placeholder="Código de inventario"
+      [(ngModel)]="equipoForm.codigoInventario"
+      name="codigoInventario"
+      required
+    >
+
+    <input
+      type="text"
+      placeholder="Tipo de equipo"
+      [(ngModel)]="equipoForm.tipoEquipo"
+      name="tipoEquipo"
+      required
+    >
+
+    <input
+      type="text"
+      placeholder="Marca"
+      [(ngModel)]="equipoForm.marca"
+      name="marca"
+      required
+    >
+
+    <button type="submit">
+      {{ modoEdicion ? 'Actualizar equipo' : 'Guardar equipo' }}
+    </button>
+  </form>
+
+  <div class="nota">
+    No se puede eliminar un equipo si tiene un préstamo activo. Primero debe devolverse o saldarse el préstamo.
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-header">
+    <div>
+      <h2>Listado de equipos</h2>
+      <p>Total registrados: {{ equipos.length }}</p>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Equipo</th>
+          <th>Código</th>
+          <th>Tipo</th>
+          <th>Marca</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let equipo of equipos">
+          <td>{{ equipo.nombre }}</td>
+          <td>{{ equipo.codigoInventario }}</td>
+          <td>{{ equipo.tipoEquipo }}</td>
+          <td>{{ equipo.marca }}</td>
+          <td>
+            <span
+              class="badge"
+              [class.disponible]="equipo.estado === 'Disponible'"
+              [class.prestado]="equipo.estado === 'Prestado'"
+            >
+              {{ equipo.estado }}
+            </span>
+          </td>
+          <td>
+            <div class="acciones">
+              <button
+                type="button"
+                class="edit"
+                (click)="editarEquipo(equipo)"
+              >
+                Editar
+              </button>
+
+              <button
+                type="button"
+                class="danger"
+                (click)="eliminarEquipo(equipo.id!)"
+              >
+                Eliminar
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <tr *ngIf="equipos.length === 0">
+          <td colspan="6" class="empty">No hay equipos registrados.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

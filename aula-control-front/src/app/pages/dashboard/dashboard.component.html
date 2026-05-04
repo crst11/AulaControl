@@ -1,0 +1,31 @@
+<section class="hero">
+  <h1>Panel principal</h1>
+  <p>Resumen general del sistema AulaControl.</p>
+</section>
+
+<section class="cards">
+  <div class="card">
+    <h3>Estudiantes</h3>
+    <span>{{ estudiantes.length }}</span>
+  </div>
+
+  <div class="card">
+    <h3>Equipos</h3>
+    <span>{{ equipos.length }}</span>
+  </div>
+
+  <div class="card">
+    <h3>Disponibles</h3>
+    <span>{{ contarDisponibles() }}</span>
+  </div>
+
+  <div class="card">
+    <h3>Prestados</h3>
+    <span>{{ contarPrestados() }}</span>
+  </div>
+
+  <div class="card">
+    <h3>Préstamos activos</h3>
+    <span>{{ contarPrestamosActivos() }}</span>
+  </div>
+</section>
