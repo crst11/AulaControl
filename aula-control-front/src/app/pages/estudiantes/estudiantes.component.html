@@ -1,0 +1,139 @@
+<section class="hero">
+  <h1>Estudiantes</h1>
+  <p>Registra, edita y elimina estudiantes del sistema.</p>
+</section>
+
+<div
+  class="mensaje"
+  *ngIf="mensaje"
+  [class.success]="tipoMensaje === 'success'"
+  [class.error]="tipoMensaje === 'error'"
+  [class.info]="tipoMensaje === 'info'"
+>
+  {{ mensaje }}
+</div>
+
+<section class="panel">
+  <div class="panel-header">
+    <div>
+      <h2>{{ modoEdicion ? 'Editar estudiante' : 'Registrar estudiante' }}</h2>
+      <p>Completa la información del estudiante.</p>
+    </div>
+
+    <button
+      *ngIf="modoEdicion"
+      type="button"
+      class="secondary"
+      (click)="limpiarFormulario()"
+    >
+      Cancelar edición
+    </button>
+  </div>
+
+  <form class="form-grid" (ngSubmit)="guardarEstudiante()">
+    <input
+      type="text"
+      placeholder="Nombre completo"
+      [(ngModel)]="estudianteForm.nombre"
+      name="nombre"
+      required
+    >
+
+    <input
+      type="text"
+      placeholder="Código estudiantil"
+      [(ngModel)]="estudianteForm.codigoEstudiante"
+      name="codigoEstudiante"
+      required
+    >
+
+    <input
+      type="email"
+      placeholder="Correo institucional"
+      [(ngModel)]="estudianteForm.correo"
+      name="correo"
+      required
+    >
+
+    <input
+      type="text"
+      placeholder="Programa académico"
+      [(ngModel)]="estudianteForm.programa"
+      name="programa"
+      required
+    >
+
+    <input
+      type="text"
+      placeholder="Teléfono"
+      [(ngModel)]="estudianteForm.telefono"
+      name="telefono"
+      required
+    >
+
+    <button type="submit">
+      {{ modoEdicion ? 'Actualizar estudiante' : 'Guardar estudiante' }}
+    </button>
+  </form>
+
+  <div class="nota">
+    No se puede eliminar un estudiante si tiene un préstamo activo. Primero debe devolver o saldar el préstamo.
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-header">
+    <div>
+      <h2>Listado de estudiantes</h2>
+      <p>Total registrados: {{ estudiantes.length }}</p>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Código</th>
+          <th>Correo</th>
+          <th>Programa</th>
+          <th>Teléfono</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let estudiante of estudiantes">
+          <td>{{ estudiante.nombre }}</td>
+          <td>{{ estudiante.codigoEstudiante }}</td>
+          <td>{{ estudiante.correo }}</td>
+          <td>{{ estudiante.programa }}</td>
+          <td>{{ estudiante.telefono }}</td>
+          <td>
+            <div class="acciones">
+              <button
+                type="button"
+                class="edit"
+                (click)="editarEstudiante(estudiante)"
+              >
+                Editar
+              </button>
+
+              <button
+                type="button"
+                class="danger"
+                (click)="eliminarEstudiante(estudiante.id!)"
+              >
+                Eliminar
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <tr *ngIf="estudiantes.length === 0">
+          <td colspan="6" class="empty">No hay estudiantes registrados.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

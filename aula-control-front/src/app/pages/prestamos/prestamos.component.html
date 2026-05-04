@@ -1,0 +1,107 @@
+<section class="hero">
+  <h1>Préstamos</h1>
+  <p>Registra préstamos y controla devoluciones de equipos.</p>
+</section>
+
+<div
+  class="mensaje"
+  *ngIf="mensaje"
+  [class.success]="tipoMensaje === 'success'"
+  [class.error]="tipoMensaje === 'error'"
+  [class.info]="tipoMensaje === 'info'"
+>
+  {{ mensaje }}
+</div>
+
+<section class="panel">
+  <h2>Registrar préstamo</h2>
+
+  <div class="alerta" *ngIf="equiposDisponibles.length === 0">
+    No hay equipos disponibles. Primero devuelve un equipo o registra uno nuevo.
+  </div>
+
+  <form class="form-prestamo" (ngSubmit)="guardarPrestamo()">
+    <select [(ngModel)]="nuevoPrestamo.estudianteId" name="estudianteId" required>
+      <option [ngValue]="0">Seleccione estudiante</option>
+      <option *ngFor="let estudiante of estudiantes" [ngValue]="estudiante.id">
+        {{ estudiante.nombre }} - {{ estudiante.codigoEstudiante }}
+      </option>
+    </select>
+
+    <select [(ngModel)]="nuevoPrestamo.equipoId" name="equipoId" required>
+      <option [ngValue]="0">Seleccione equipo disponible</option>
+      <option *ngFor="let equipo of equiposDisponibles" [ngValue]="equipo.id">
+        {{ equipo.nombre }} - {{ equipo.codigoInventario }}
+      </option>
+    </select>
+
+    <input
+      type="datetime-local"
+      [(ngModel)]="nuevoPrestamo.fechaDevolucionEstimada"
+      name="fechaDevolucionEstimada"
+      required
+    >
+
+    <input
+      type="text"
+      placeholder="Observación"
+      [(ngModel)]="nuevoPrestamo.observacion"
+      name="observacion"
+    >
+
+    <button type="submit">Registrar préstamo</button>
+  </form>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Estudiante</th>
+          <th>Equipo</th>
+          <th>Fecha préstamo</th>
+          <th>Devolución estimada</th>
+          <th>Observación</th>
+          <th>Estado</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let prestamo of prestamos">
+          <td>{{ obtenerNombreEstudiante(prestamo) }}</td>
+          <td>{{ obtenerNombreEquipo(prestamo) }}</td>
+          <td>{{ prestamo.fechaPrestamo | date:'short' }}</td>
+          <td>{{ prestamo.fechaDevolucionEstimada | date:'short' }}</td>
+          <td>{{ prestamo.observacion || 'Sin observación' }}</td>
+          <td>
+            <span
+              class="badge"
+              [class.activo]="prestamo.estadoPrestamo === 'Activo'"
+              [class.devuelto]="prestamo.estadoPrestamo === 'Devuelto'"
+            >
+              {{ prestamo.estadoPrestamo }}
+            </span>
+          </td>
+          <td>
+            <button
+              *ngIf="prestamo.estadoPrestamo === 'Activo'"
+              type="button"
+              class="secondary"
+              (click)="devolverPrestamo(prestamo.id!)"
+            >
+              Devolver
+            </button>
+
+            <span *ngIf="prestamo.estadoPrestamo !== 'Activo'" class="sin-accion">
+              Finalizado
+            </span>
+          </td>
+        </tr>
+
+        <tr *ngIf="prestamos.length === 0">
+          <td colspan="7" class="empty">No hay préstamos registrados.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
